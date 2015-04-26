@@ -1,0 +1,220 @@
+<!--
+QUICK CUSTOMIZATION:
+
+CATEGORY NAME OF NOTES TO PRINT FOR COLUMN 1
+{% assign person_category = "Person" %}
+
+{% assign notes_av = "Audio/Visual" %}
+{% assign notes_lights = "Lighting" %}
+{% assign notes_ushers = "Ushers" %}
+{% assign notes_worship = "Worship Team" %}
+
+CATEGORY NAME OF PEOPLE TO PRINT AT BOTTOM OF REPORT
+{% assign plan_person_category = "Band" %}
+-->
+<html>
+
+    <head>
+        <title>{{ plan.ministry.name }}:: {{ plan.dates }}</title>
+        <style>
+
+            body { padding:0; margin:5px; color: #313336;
+                   font: 13px/1.5 "Myriad Pro", "Myriad", "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+                 }
+            table#plan { width: 100%; border-collapse: collapse; margin-top:0px; margin-bottom: 15px; }
+            table#plan th {
+                            border-left: 1px solid #D7DBE4; border-right: 1px solid #D7DBE4;
+                            color: #ADB3C0;
+                            font-weight: bold;
+                            padding: 4px 7px 2px 7px;
+                            min-width: 60px;
+                            vertical-align: middle;
+                          }
+            table#plan td { text-align: center; font-size: 1em  }
+            table#plan tbody, #plan thead { border: 0px solid #D7DBE4; }
+            table#plan thead { display: table-header-group; }
+            table#plan tbody td { border: 1px solid #D7DBE4; padding: 2px; vertical-align: middle; }
+            table#plan .preservice { background-color: #f5f5f5; color: #7F7F7F; font-style: italic; }
+            table#plan .time { width: 70px; text-align: center; vertical-align: middle; }
+            table#plan .length { width: 55px; text-align: center; vertical-align: middle; font-size: .9em; }
+            table#plan .person_column { width: ; text-align: center; vertical-align: middle; }
+            table#plan .general_column { width: ; text-align: center; vertical-align: middle; }
+            table#plan .header { text-align: center;
+                                 color: white;
+                                 font-weight: normal;
+                                 padding: 4px 7px;
+                                 font-size: 0.9em;
+                                 background: #4A6084;
+                                }
+            table#plan .note { text-align: center; font-size: .9em; vertical-align: middle;  }
+
+            table#plan .element { text-align: left;
+                                  font-size: 1em;
+                                  vertical-align: middle;
+                                  padding: 6px;
+                                }
+            table#plan .element .description { font-size: 0.8em; color: #555; font-style: normal; }
+            table#plan .element .role_note { font-size: 0.8em; color: #555; font-style: italic; }
+
+            table#plan .song {
+                               background: #ECF0F6;
+                               background: -moz-linear-gradient(top, #F4F7FA 0%, #ECF0F6 100%);
+                               background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F4F7FA), color-stop(100%,#ECF0F6));
+                               background: -webkit-linear-gradient(top, #F4F7FA 0%,#ECF0F6 100%);
+                               background: -o-linear-gradient(top, #F4F7FA 0%,#ECF0F6 100%);
+                               background: -ms-linear-gradient(top, #F4F7FA 0%,#ECF0F6 100%);
+                               background: linear-gradient(top, #F4F7FA 0%,#ECF0F6 100%);
+                              }
+            table#plan .media {
+                               background: #F1F8E8;
+                               background: -moz-linear-gradient(top, #F7FBF2 0%, #F1F8E8 100%);
+                               background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #F7FBF2), color-stop(100%, #F1F8E8));
+                               background: -webkit-linear-gradient(top, #F7FBF2 0%,#F1F8E8 100%);
+                               background: -o-linear-gradient(top, #F7FBF2 0%,#F1F8E8 100%);
+                               background: -ms-linear-gradient(top, #F7FBF2 0%,#F1F8E8 100%);
+                               background: linear-gradient(top, #F7FBF2 0%,#F1F8E8 100%);
+                              }
+
+
+            table#plan .footer { text-align: center;
+                                 font-size: .9em; vertical-align: middle;
+                                 padding: 0px; }
+
+            table#header { width: 100%; border: none; padding: 0; border-collapse: collapse; }
+            table#header td { padding: 2px; vertical-align: top; }
+
+H1 {  font-size: 2.5em;
+      font-weight: normal;
+      text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.9);
+      }
+H2 {  font-size: 2em;
+      font-weight: normal;
+      padding: 20px 35px;
+      margin: 0;
+      line-height: 1em;
+      text-shadow: 0 1px 0 white;
+      }
+H3 {
+      font-size: 1.4em;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      }
+
+PRE { margin: 0; padding: 0; white-space: pre-wrap; font-size: .9em; }
+
+.person { margin-right: 15px; float: left; }
+.position { font-weight: bold; }
+
+
+#header {
+          padding: 5px 20px;
+          background: black;
+          color: white;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+          border-bottom: 1px solid black;
+          border-left: 1px solid black;
+          border-right: 1px solid black;
+          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+          line-height: .8em;
+          margin: 0;
+          margin-bottom: 15px;
+          text-align: center;
+          }
+#header img { float: right; height: 80px; margin-right: -15px; }
+#titles { background: #F0F2F6;
+          color: #3D4A60;
+          border: 1px solid #D7DBE4;
+          font-size: 2em;
+          font-weight: normal;
+          padding: 15px 20px;
+          margin: 0;
+          line-height: 1em;
+          text-shadow: 0 1px 0 white;
+          }
+#titles img { border: 2px solid #C4C9D4;
+              border-image: initial;
+          }
+#plan_title { font-style: normal;
+              font-size: .65em;
+              display: block;
+              color: #6D7684;
+              margin: 4px 0 0 0;
+          }
+        </style>
+    </head>
+<body>
+{% comment %}<img style="float: left; margin-right: 15px; height: 50px;" src="{{ organization.logo_url }}" />{% endcomment %}
+
+<div id="header">
+  <h1>{{ plan.dates }}</h1>
+  <h3>DETAILED ORDER OF SERVICE</h1>
+</div>
+
+  <table id="plan">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th align="left">Element</th>
+      <th>Lead</th>
+      <th>Time</th>
+      {% for time in plan.plan_times %}
+            <th>
+            {% case forloop.index %}
+              {% when 1 %}{{ forloop.index }}st
+              {% when 2 %}{{ forloop.index }}nd
+              {% when 3 %}{{ forloop.index }}rd
+              {% else %}{{ forloop.index }}th
+            {% endcase %}
+            </th>
+            <th>(+/-)</th>
+            {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+        {% for item in plan.items %}
+            {% case item.item_type %}
+            {% when 'Header' %}
+                  <tr>
+                    <td colspan="4" class="header">{{ item.title }}</td>
+            {% else %}
+                  <tr class="{% if item.is_preservice or item.is_postservice %}preservice{% endif %}">
+                   <td>
+                   {% for item_time in item.times %}
+                       {{ item_time.actual_time | date: "%I:%M" }}
+                       {% unless forloop.last %}
+                       /
+                       {% endunless %}
+                   {% endfor %}
+                   </td>
+                   <td class="item element {% if item.is_preservice or item.is_postservice %}preservice{% endif %}{% if item.song %} song{% endif %}{% if item.item_type == 'Media' %} media{% endif %}">
+                        {{ item.title }}
+                        <div class="description">{{ item.description }}</div>
+                        <div class="role_note">{% for note in item.notes %}{% if note.category_name == notes_av %} Audio/Visual: <br/> • {{ note.note | replace: ",", "<br/> • " }}{% endif %}{% endfor %}</div>
+                        <div class="role_note">{% for note in item.notes %}{% if note.category_name == notes_lights %} Lighting: <br/> • {{ note.note | replace: ",", "<br/> • " }}{% endif %}{% endfor %}</div>
+                        <div class="role_note">{% for note in item.notes %}{% if note.category_name == notes_ushers %} Ushers: <br/> • {{ note.note | replace: ",", "<br/> • " }}{% endif %}{% endfor %}</div>
+                        <div class="role_note">{% for note in item.notes %}{% if note.category_name == notes_worship %} Worship Team: <br/> • {{ note.note | replace: ",", "<br/> • " }}{% endif %}{% endfor %}</div>
+</td>
+                   <td class="item note person_column {% if item.is_preservice or item.is_postservice %}preservice{% endif %}{% if item.song %} song{% endif %}{% if item.item_type == 'Media' %} media{% endif %}">{% for note in item.notes %}{% if note.category_name == person_category %}{{ note.note }}{% endif %}{% endfor %}</td>
+                   <td class="item length {% if item.is_preservice or item.is_postservice %}preservice{% endif %}{% if item.song %} song{% endif %}{% if item.item_type == 'Media' %} media{% endif %}">{{ item.clean_length }}</td>
+                   {% for time in plan.plan_times %}
+                   <td></td>
+                   <td></td>
+                   {% endfor %}
+            {% endcase %}
+            </tr>
+        {% endfor %}
+  </tbody>
+  </table>
+
+          {% for plan_person in plan.plan_people_not_declined %}
+        {% if plan_person.person.name != null %}
+            {% if plan_person.category.name == plan_person_category %}
+          <div class="person">
+            <span class="position">{{ plan_person.position }}: </span>{{ plan_person.person.name }}
+          </div>
+            {% endif %}
+        {% endif %}
+                            {% endfor %}
+
+</body>
+
+</html>
