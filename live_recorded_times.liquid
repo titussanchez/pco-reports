@@ -1,0 +1,165 @@
+<!--
+Learn more about Planning Center LIVE here:
+http://get.planningcenteronline.com/support/videos/#IntroducingPlanningCenterLive
+
+QUICK CUSTOMIZATION:
+
+{% assign print_planned_times = true %}
+{% assign print_actual_times = true %}
+{% assign print_actual_length = true %}
+{% assign print_length_difference = true %}
+
+{% assign color_of_items_that_go_over = "red" %}
+{% assign header_color = "silver" %}
+-->
+<html>
+
+    <head>
+        <title>{{ plan.ministry.name }}:: {{ plan.dates }}:: LIVE times</title>
+        <style>
+            * { font-family: Verdana, Arial; font-size: 10pt; }
+            body { padding:0; margin:15px; }
+            table#plan { width: 100%; border-collapse: collapse; margin-top:5px; outline: solid 2px black; }
+            table#plan th { background-color: {{ header_color }}; color: black; font-size: 11pt; }
+            table#plan td { text-align: center; font-size: 1em  }
+            table#plan tbody, #plan thead, #plan tfoot { border: solid 2px gray; }
+            table#plan thead { display: table-header-group; }
+            table#plan tbody td { border: solid 1pt {{ header_color }}; padding: 2px; vertical-align: middle; }
+            table#plan .preservice { background-color: #eee; height: 20px}
+            table#plan .time { width: 70px; text-align: center; vertical-align: middle; }
+            table#plan .length { width: 55px; text-align: center; vertical-align: middle; }
+            table#plan .lights { width: 55px; text-align: center; vertical-align: middle; }
+            table#plan .header { text-align: center; font-weight: bold; font-size: 0.9em;  }
+            table#plan .note { text-align: center; font-size: 8pt; vertical-align: middle;  }
+            table#plan .item { padding-top: 6px; padding-bottom: 6px; }
+
+            table#plan .time {  }
+            table#plan .element { text-align: left; font-family: Arial Black; font-size: 11pt; vertical-align: middle; height: 33px; padding-top: 0px; padding-left: 10px;}
+            table#plan .element pre { font-weight: normal; font-size: 0.8em }
+            table#plan .odd { background-color: #DDD; }
+            table#plan .song { font-style: italic; }
+
+            table#plan .footer { text-align: center; font-family: Arial Black; font-size: 11pt; vertical-align: middle; border: solid 3px black; padding: 0px; }
+
+            table#header { width: 100%; border: none; padding: 0; border-collapse: collapse;}
+            table#header td { padding: 2px; vertical-align: top; }
+
+            H1 { text-align: center; padding: 0; margin-top: 10; margin-bottom: 10; font-size: 20pt; font-weight: bold; }
+            H2 { text-align: center; padding: 0; margin: 0; font-size: 16pt; font-style: italic; font-weight: normal; }
+            H3 { text-align: center; padding: 0; margin: 0; font-size: 13pt; font-weight: normal; }
+            H4 { text-align: center; padding: 0; margin: 0; font-size: 10pt }
+            PRE { margin: 0; padding: 0; white-space: normal; }
+
+            .over { color: {{ color_of_items_that_go_over }}; }
+            .over:before { content: '('; }
+            .over:after  { content: ')'; }
+            .times TD {
+            font-family: arial;
+            font-size: 8pt;
+            vertical-align: top;
+            padding: 0px;
+            }
+
+            .times TH {
+            font-weight: normal;
+            font-family: impact;
+            font-size: 11pt;
+            text-align: left;
+            text-decoration: underline;
+            padding: 0px;
+            }
+        </style>
+    </head>
+<body>
+  <table width="100%">
+     <tr>
+          <td width="20%" valign="top"><image src="{{ organization.logo_url }}" /></td>
+    <td>
+    <h1>{{ plan.ministry.name }}</h1>
+    <h2>{{ plan.dates }}</h2>
+    <h3>{{ plan.plan_title }}</h3>
+          </td>
+     </tr>
+  </table>
+
+  <table id="plan">
+  <thead>
+    <tr>
+      <th class="element">Element</th>
+      <th>Planned Length</th>
+                        {% for time in plan.plan_times %}
+                           {% if print_actual_length == true %}
+                              <th class="time">{{ time.starts_at | date: '%I:%M%p' | downcase }}<br />Planned Start</th>
+                           {% endif %}
+                           {% if print_length_difference == true %}
+                              <th class="time">{{ time.starts_at | date: '%I:%M%p' | downcase }}<br />Actual Start</th>
+                           {% endif %}
+                           {% if print_planned_times == true %}
+                              <th class="time">{{ time.starts_at | date: '%I:%M%p' | downcase }}<br />Difference</th>
+                           {% endif %}
+                           {% if print_actual_times == true %}
+                              <th class="time">{{ time.starts_at | date: '%I:%M%p' | downcase }}<br />Actual Length</th>
+                           {% endif %}
+                        {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+        {% for item in plan.items %}
+               {% if item.is_postservice %}
+                  {% assign postservicetitle = item.title %}
+               {% else %}
+                  <tr class="{% if item.is_preservice %}preservice{% endif %}">
+                   <td class="{% if item.item_type == 'Header' %}header{% else %}item element {% if item.song %}song{% endif %}{% endif %}">
+                        {{ item.title }}
+                   </td>
+                   <td class="item length">{% if item.item_type != 'Header' %}{{ item.clean_length }}{% endif %}</td>
+                      {% for time in plan.plan_times %}
+                          {% if print_planned_times == true %}
+                            <td class="time item">
+                               {% for item_time in item.times %}{% if item_time.time_id == time.id %}{{ item_time.actual_time | date: '%I:%M%p' | downcase }} {% endif %}{% endfor %}
+                            </td>
+                          {% endif %}
+                          {% if print_actual_times == true %}
+                            <td class="time item">
+                              {% for item_time in item.times %}{% if item_time.time_id == time.id %}<span class="">{{ item_time.actual_start | date: '%I:%M%p' | downcase }}</span> {% endif %}{% endfor %}
+                            </td>
+                          {% endif %}
+                          {% if print_length_difference == true %}
+                            <td class="time item">
+                              {% for item_time in item.times %}{% if item_time.time_id == time.id %}<span class="{% if item_time.over? %}over{% endif %}">{{ item_time.difference }}</span>{% endif %}{% endfor %}
+                            </td>
+                          {% endif %}
+                          {% if print_actual_length == true %}
+                            <td class="time item">
+                              {% for item_time in item.times %}{% if item_time.time_id == time.id %}<span class="{% if item_time.over? %}over{% endif %}">{{ item_time.actual_length }}</span> {% endif %}{% endfor %}
+                            </td>
+                          {% endif %}
+                      {% endfor %}
+                {% endif %}
+            </tr>
+        {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+          <th class="item {% if postservicetitle != null %}footer{% endif %}">{{ postservicetitle }}</th>
+                      <th>{{ plan.total_length }}</th>
+                      {% for time in plan.plan_times %}
+                          {% if print_planned_times == true %}
+                              <th class="time">{{ time.ends_at | date: '%I:%M%p' | downcase }}</th>
+                          {% endif %}
+                          {% if print_actual_times == true %}
+                              <th class="time">{{ time.actual_end | date: '%I:%M%p' }}</th>
+                          {% endif %}
+                          {% if print_length_difference == true %}
+                              <th class="time"></th>
+                          {% endif %}
+                          {% if print_actual_length == true %}
+                              <th class="time"><span class="{% if (time.actual_end > time.ends_at) %}over{% endif %}">{{ time.actual_length }}</span></th>
+                          {% endif %}
+                      {% endfor %}
+    </tr>
+  </tfoot>
+  </table>
+</body>
+
+</html>
